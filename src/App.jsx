@@ -1,19 +1,26 @@
 
+// import ViewRequests from './pages/Admin/ViewRequests';
+import { Route, BrowserRouter as Router, Routes } from 'react-router-dom';
+import Login from './pages/registration/Login';
 import ViewRequests from './pages/Admin/ViewRequests';
-
-const membersData = [
-  { id: 1, name: 'John Doe' },
-  { id: 2, name: 'Jane Smith' },
-  { id: 3, name: 'Alice Johnson' },
-  // Add more members as needed
-];
+import { UserProvider } from './providers/UserContext';
+import RequireAuth from './auth/requireAuth';
 
 function App() {
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-start justify-center pt-10">
-      <ViewRequests data={membersData} />
-    </div>
+    <>
+      <UserProvider>
+        <Router>
+          <Routes>
+            <Route path='/' element={<Login />} />
+            <Route element={<RequireAuth />}>
+              <Route path='/dashboard' element={<ViewRequests />} />
+            </Route>
+          </Routes>
+        </Router>
+      </UserProvider>
+    </>
   );
 }
 
