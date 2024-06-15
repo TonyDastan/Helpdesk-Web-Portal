@@ -9,7 +9,7 @@ const RequireAuth = () => {
         token ?
             <Outlet />
             :
-            <Navigate to="/dashboard" />
+            <Navigate to="/" />
     )
 }
 
