@@ -9,7 +9,7 @@ import Header from '../../Components/Header/Header';
 const ViewRequests = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMember, setSelectedMember] = useState(null);
-    const [issues, setIssues] = useState([]);
+    const [issues, setIssues] = useState([]); // Ensure initial state is an array
 
     useEffect(() => {
         const fetchIssues = async () => {
@@ -20,10 +20,13 @@ const ViewRequests = () => {
                         'Authorization': `Bearer ${token}`
                     }
                 });
-                setIssues(response.data);
-                
+
+                // Ensure response data is an array before setting the state
+                const issuesData = Array.isArray(response.data) ? response.data : [];
+                setIssues(issuesData);
+
                 // Loop through issues and fetch user data for each issue
-                for (let issue of response.data) {
+                for (let issue of issuesData) {
                     await fetchUserData(issue.user);
                 }
             } catch (error) {
@@ -41,7 +44,7 @@ const ViewRequests = () => {
 
     const fetchUserData = async (user_id) => {
         try {
-            const token = localStorage.getItem('refresh_token')
+            const token = localStorage.getItem('refresh_token');
             const userData = await axios.get(`${api.fetchUser}/${user_id}/`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
@@ -49,8 +52,6 @@ const ViewRequests = () => {
             });
 
             if (userData.status === 200) {
-                // console.log('Success: ', userData.data);
-                
                 // Update issues state with user data
                 setIssues(prevIssues => {
                     const updatedIssues = prevIssues.map(issue => {
@@ -66,13 +67,12 @@ const ViewRequests = () => {
                     return updatedIssues;
                 });
             } else {
-                console.log('Error Occured: ', userData.error);
+                console.error('Error Occurred:', userData.error);
             }
         } catch (error) {
-            console.log('Error fetching User: ', error);
+            console.error('Error fetching User:', error);
         }
-    }
-
+    };
 
     const openModal = (member) => {
         setSelectedMember(member);
@@ -158,6 +158,6 @@ const ViewRequests = () => {
             </div>
         </div>
     );
-}
+};
 
-export default ViewRequests
+export default ViewRequests;
