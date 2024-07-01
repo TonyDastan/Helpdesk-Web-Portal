@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { api } from '../../utils/apis';
@@ -8,6 +9,7 @@ const ViewResponses = () => {
     const [responses, setResponses] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedResponse, setSelectedResponse] = useState(null);
+    const [feedbacks, setFeedbacks] = useState({}); // New state to store feedbacks
 
     useEffect(() => {
         fetchResponses();
@@ -17,8 +19,22 @@ const ViewResponses = () => {
         try {
             const response = await axios.get(api.fetchResponsesUrl);
             setResponses(response.data);
+            // Fetch feedback for each response
+            response.data.forEach(fetchFeedback);
         } catch (error) {
             console.error('Error fetching responses:', error);
+        }
+    };
+
+    const fetchFeedback = async (response) => {
+        try {
+            const feedbackResponse = await axios.get(`${api.fetchFeedbacksUrl}/${response.id}/`);
+            setFeedbacks(prevFeedbacks => ({
+                ...prevFeedbacks,
+                [response.id]: feedbackResponse.data
+            }));
+        } catch (error) {
+            console.error(`Error fetching feedback for response ${response.id}:`, error);
         }
     };
 
@@ -72,6 +88,14 @@ const ViewResponses = () => {
                         <div className="mb-2">
                             <span className="font-semibold">Reply Date:</span>{' '}
                             {new Date(response.reply_date).toLocaleString()}
+                        </div>
+                        <div className="mb-2">
+                            <span className="font-semibold">Feedback:</span> 
+                            <ul>
+                                {feedbacks[response.id]?.map((feedback) => (
+                                    <li key={feedback.id}>{feedback.feedback_text}</li>
+                                )) || 'No feedback available.'}
+                            </ul>
                         </div>
                         <div className="flex space-x-2">
                             <button

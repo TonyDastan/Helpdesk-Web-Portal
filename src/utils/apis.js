@@ -6,4 +6,5 @@ export const api = {
     fetchUser: baseURL + 'api/auth/user-information',
     createUpdateResponseUrl: baseURL + 'api/helpdesk/issue-response/',
     fetchResponsesUrl: baseURL + 'api/helpdesk/get-issue-responses/',
+    fetchFeedbacksUrl: baseURL + 'api/helpdesk/response-feedback',
 };
