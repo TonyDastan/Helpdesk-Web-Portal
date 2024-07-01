@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FiHelpCircle } from 'react-icons/fi'; 
 
 const Header = () => {
@@ -18,8 +18,9 @@ const Header = () => {
                 <h1 className="text-2xl font-bold">HELPDESK</h1>
                 <FiHelpCircle className="ml-2" size={24} />
             </div>
+            <Link to="/responses" className="text-blue-600 hover:underline mr-4">View Responses</Link>
             <button
-                className="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700"
+                className="bg-red-600 text-black px-4 py-2 rounded hover:bg-red-700"
                 onClick={handleLogout}
             >
                 Logout

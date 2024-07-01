@@ -1,14 +1,14 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import React, { useEffect, useState } from 'react'
-import Modal from '../../Components/Modal/Modal'
+import React, { useEffect, useState } from 'react';
+import Modal from '../../Components/Modal/Modal';
 import axios from 'axios';
 import { api } from '../../utils/apis';
 import Header from '../../Components/Header/Header';
 
 const ViewRequests = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedMember, setSelectedMember] = useState(null);
+    const [selectedIssue, setSelectedIssue] = useState(null);
     const [issues, setIssues] = useState([]); // Ensure initial state is an array
 
     useEffect(() => {
@@ -36,10 +36,10 @@ const ViewRequests = () => {
 
         fetchIssues();
 
-        const intervalId = setInterval(fetchIssues, 90000); 
+        const intervalId = setInterval(fetchIssues, 90000);
 
         // Cleanup interval on component unmount
-        return () => clearInterval(intervalId); 
+        return () => clearInterval(intervalId);
     }, []);
 
     const fetchUserData = async (user_id) => {
@@ -74,23 +74,23 @@ const ViewRequests = () => {
         }
     };
 
-    const openModal = (member) => {
-        setSelectedMember(member);
+    const openModal = (issue) => {
+        setSelectedIssue(issue);
         setIsModalOpen(true);
     };
 
     const closeModal = () => {
         setIsModalOpen(false);
-        setSelectedMember(null);
+        setSelectedIssue(null);
     };
 
     const getStatusComponent = (status) => {
         const badgeStyle = {
             padding: '0.25rem 0.75rem',
-            borderRadius: '16px', 
+            borderRadius: '16px',
             fontSize: '0.7rem',
         };
-    
+
         if (status) {
             return <div style={{ ...badgeStyle, backgroundColor: '#34D399', color: '#ffffff' }}>Success</div>;
         } else {
@@ -152,8 +152,8 @@ const ViewRequests = () => {
                         </table>
                     </div>
                 </div>
-                {selectedMember && (
-                    <Modal isOpen={isModalOpen} closeModal={closeModal} member={selectedMember} />
+                {selectedIssue && (
+                    <Modal isOpen={isModalOpen} closeModal={closeModal} issue={selectedIssue} />
                 )}
             </div>
         </div>
