@@ -23,6 +23,8 @@ const ViewRequests = () => {
 
                 // Ensure response data is an array before setting the state
                 const issuesData = Array.isArray(response.data) ? response.data : [];
+                // Sort issues by submitted_on date in descending order
+                issuesData.sort((a, b) => new Date(b.submitted_on) - new Date(a.submitted_on));
                 setIssues(issuesData);
 
                 // Loop through issues and fetch user data for each issue

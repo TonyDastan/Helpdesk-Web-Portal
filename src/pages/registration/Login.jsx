@@ -6,7 +6,8 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import { api } from '../../utils/apis';
 import { useUser } from '../../providers/UserContext';
 import ErrorText from '../../Components/Typography/ErrorText';
-
+import { Bounce, Slide, Zoom, toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
 
@@ -35,22 +36,32 @@ const Login = () => {
                     localStorage.setItem("user", JSON.stringify(user));
                     setUser({ id: user.id, ...user });
                     console.log("Login Successful: ");
-
-                    // Redirect the user to the dashboard
-                    navigate('/dashboard');
+                    toast.success('Login Success', {
+                        position: "top-right",
+                    });
+                    // Delay the navigation to allow the toast to be visible
+                    setTimeout(() => {
+                        navigate('/dashboard');
+                    }, 1000); // 1 second delay
                 } else {
-                    setErrorMessage("Only Admin are allowed");
                     console.log("Only Admin required");
+                    toast.warning('Only Admin Allowed', {
+                        position: "top-right",
+                    })
                     navigate('/');
                 }
             } else {
-                setErrorMessage("Invalid email or password. Please try again.");
+                toast.error("Invalid email or password. Please try again.", {
+                    position: "top-right",
+                });
                 navigate('/');
             }
         } catch (error) {
             // Handle login failure
             console.error('Login failed:', error);
-            setErrorMessage("Something occured. Please try again.");
+            toast.error("Something occured. Please try again.", {
+                position: "top-right",
+            });
             navigate('/');
         }
     };
@@ -106,6 +117,7 @@ const Login = () => {
 
                             <ErrorText styleClass="mt-8 text-md text-red-400">{errorMessage}</ErrorText>
                             <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800">Sign in</button>
+                            <ToastContainer transition={Slide} />
                         </form>
                     </div>
                 </div>
